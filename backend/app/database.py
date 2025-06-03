@@ -1,10 +1,9 @@
-import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGO_URI")
-client = MongoClient(MONGO_URI)
+client = MongoClient(os.getenv("MONGO_URI"))
 db = client["event_calendar"]
 event_collection = db["events"]
