@@ -6,6 +6,7 @@ export default function Calendar() {
     <div className="mx-auto max-w-4xl rounded-xl bg-white p-4 shadow-md">
       <FullCalendar
         plugins={[dayGridPlugin]}
+        height="auto"
         initialView="dayGridMonth"
         headerToolbar={{
           left: 'prev,next today',
