@@ -3,9 +3,13 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import { useEffect, useState } from 'react'
 import type { EventInput } from '@fullcalendar/core/index.js'
 import interactionPlugin from '@fullcalendar/interaction'
+import EventModal from './event-modal/event-modal'
+import type { CalendarEvent } from '../types/event'
 
 export default function Calendar() {
   const [events, setEvents] = useState<EventInput[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedRange, setSelectedRange] = useState<{ start: string, end: string }>({ start: '', end: '' })
 
   useEffect(() => {
     fetch('http://localhost:8000/events')
@@ -14,29 +18,24 @@ export default function Calendar() {
   }, [])
 
   const handleDateSelect = (selectInfo: any) => {
-    const title = prompt('Enter event title')
-    if (!title) return
-
-    const newEvent = {
-      title,
+    setSelectedRange({
       start: selectInfo.startStr,
       end: selectInfo.endStr,
-      allDay: selectInfo.allDay,
-    }
+    })
+    setIsModalOpen(true)
+  }
 
+  const handleSaveEvent = (eventData: CalendarEvent) => {
     fetch('http://localhost:8000/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newEvent),
+      body: JSON.stringify(eventData),
     })
       .then(res => res.json())
-      .then(savedEvent => {
-        setEvents((prev) => [...prev, savedEvent])
-      }).catch(err => {
-      console.error('Error saving event:', err)
-      alert('Failed to save event')
-    })
+      .then(newEvent => setEvents(prev => [...prev, newEvent]))
+      .catch(console.error)
   }
+
 
   const handleEventRemove = (clickInfo: any) => {
     if (!window.confirm(`Delete event "${clickInfo.event.title}"?`)) return
@@ -64,6 +63,13 @@ export default function Calendar() {
         events={events}
         select={handleDateSelect}
         eventClick={handleEventRemove}
+      />
+      <EventModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveEvent}
+        defaultStart={selectedRange.start}
+        defaultEnd={selectedRange.end}
       />
     </div>
   )

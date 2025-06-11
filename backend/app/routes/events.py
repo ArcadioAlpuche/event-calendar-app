@@ -16,4 +16,6 @@ async def get_events():
 @router.post("/")
 async def create_event(event: Event):
     result = event_collection.insert_one(event.dict())
-    return {"id": str(result.inserted_id)}
+    saved_event = event.dict()
+    saved_event["_id"] = str(result.inserted_id)
+    return saved_event

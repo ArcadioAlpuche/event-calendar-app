@@ -1,5 +1,5 @@
 export interface CalendarEvent {
-  _id?: string // MongoDB ID (optional if you're not using it in the frontend)
+  _id?: string
   title: string
   description?: string
   location?: string
