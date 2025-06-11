@@ -32,7 +32,10 @@ export default function Calendar() {
       .then(res => res.json())
       .then(savedEvent => {
         setEvents((prev) => [...prev, savedEvent])
-      })
+      }).catch(err => {
+      console.error('Error saving event:', err)
+      alert('Failed to save event')
+    })
   }
 
   const handleEventRemove = (clickInfo: any) => {
