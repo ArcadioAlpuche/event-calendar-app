@@ -9,12 +9,15 @@ import type { CalendarEvent } from '../types/event'
 export default function Calendar() {
   const [events, setEvents] = useState<EventInput[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedRange, setSelectedRange] = useState<{ start: string, end: string }>({ start: '', end: '' })
+  const [selectedRange, setSelectedRange] = useState<{ start: string; end: string }>({
+    start: '',
+    end: '',
+  })
 
   useEffect(() => {
     fetch('http://localhost:8000/events')
-      .then(res => res.json())
-      .then(data => setEvents(data))
+      .then((res) => res.json())
+      .then((data) => setEvents(data))
   }, [])
 
   const handleDateSelect = (selectInfo: any) => {
@@ -31,11 +34,10 @@ export default function Calendar() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(eventData),
     })
-      .then(res => res.json())
-      .then(newEvent => setEvents(prev => [...prev, newEvent]))
+      .then((res) => res.json())
+      .then((newEvent) => setEvents((prev) => [...prev, newEvent]))
       .catch(console.error)
   }
-
 
   const handleEventRemove = (clickInfo: any) => {
     if (!window.confirm(`Delete event "${clickInfo.event.title}"?`)) return
@@ -43,7 +45,7 @@ export default function Calendar() {
     fetch(`http://localhost:8000/events/${clickInfo.event.id}`, {
       method: 'DELETE',
     }).then(() => {
-      setEvents((prev) => prev.filter(e => e.id !== clickInfo.event.id))
+      setEvents((prev) => prev.filter((e) => e.id !== clickInfo.event.id))
     })
   }
 

@@ -3,6 +3,7 @@ export interface CalendarEvent {
   title: string
   description?: string
   location?: string
-  start_time: string // ISO format: "2025-05-24T10:00:00"
-  end_time: string
+  start: string
+  end: string
+  allDay?: boolean
 }

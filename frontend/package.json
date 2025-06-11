@@ -19,6 +19,9 @@
     "@fullcalendar/rrule": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.17",
     "@tailwindcss/vite": "^4.1.8",
+    "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
+    "postcss": "^8.5.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.8"
