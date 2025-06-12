@@ -1,46 +1,46 @@
-import { useState } from 'react'
-import type { CalendarEvent } from '../../types/event'
-import { CButton } from '../c-button'
-import { formatDateTimeLocal } from '../../utils/date'
+import { useState } from 'react';
+import type { CalendarEvent } from '../types/event';
+import { CButton } from './c-button';
+import { formatDateTimeLocal } from '../utils/date';
 
 type Props = {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (data: CalendarEvent) => void
-}
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (data: CalendarEvent) => void;
+};
 
 export default function EventModal({ isOpen, onClose, onSave }: Props) {
-  const [title, setTitle] = useState<string>('')
-  const [start, setStart] = useState(() => formatDateTimeLocal(new Date()))
-  const [end, setEnd] = useState<string>('')
-  const [allDay, setAllDay] = useState<boolean>(true)
-  const [dateError, setDateError] = useState<boolean>(false)
+  const [title, setTitle] = useState<string>('');
+  const [start, setStart] = useState(() => formatDateTimeLocal(new Date()));
+  const [end, setEnd] = useState<string>('');
+  const [allDay, setAllDay] = useState<boolean>(true);
+  const [dateError, setDateError] = useState<boolean>(false);
 
   const handleSubmit = () => {
     if (new Date(end) < new Date(start)) {
-      setDateError(true)
-      return
+      setDateError(true);
+      return;
     }
-    setDateError(false)
-    onSave({ title, start, end, allDay })
-    onClose()
-  }
+    setDateError(false);
+    onSave({ title, start, end, allDay });
+    onClose();
+  };
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newStart = e.target.value
-    setStart(newStart)
+    const newStart = e.target.value;
+    setStart(newStart);
 
     // reset end if now invalid
     if (end && new Date(newStart) > new Date(end)) {
-      setEnd('')
+      setEnd('');
     }
-  }
+  };
 
   const handleEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEnd(e.target.value)
-  }
+    setEnd(e.target.value);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-950/70">
@@ -82,5 +82,5 @@ export default function EventModal({ isOpen, onClose, onSave }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

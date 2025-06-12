@@ -1,32 +1,32 @@
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import { useEffect, useState } from 'react'
-import type { EventInput } from '@fullcalendar/core/index.js'
-import interactionPlugin from '@fullcalendar/interaction'
-import EventModal from './event-modal/event-modal'
-import type { CalendarEvent } from '../types/event'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import { useEffect, useState } from 'react';
+import type { EventInput } from '@fullcalendar/core/index.js';
+import interactionPlugin from '@fullcalendar/interaction';
+import EventModal from './event-modal';
+import type { CalendarEvent } from '../types/event';
 
 export default function Calendar() {
-  const [events, setEvents] = useState<EventInput[]>([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [events, setEvents] = useState<EventInput[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedRange, setSelectedRange] = useState<{ start: string; end: string }>({
     start: '',
     end: '',
-  })
+  });
 
   useEffect(() => {
     fetch('http://localhost:8000/events')
       .then((res) => res.json())
-      .then((data) => setEvents(data))
-  }, [])
+      .then((data) => setEvents(data));
+  }, []);
 
   const handleDateSelect = (selectInfo: any) => {
     setSelectedRange({
       start: selectInfo.startStr,
       end: selectInfo.endStr,
-    })
-    setIsModalOpen(true)
-  }
+    });
+    setIsModalOpen(true);
+  };
 
   const handleSaveEvent = (eventData: CalendarEvent) => {
     fetch('http://localhost:8000/events', {
@@ -36,18 +36,18 @@ export default function Calendar() {
     })
       .then((res) => res.json())
       .then((newEvent) => setEvents((prev) => [...prev, newEvent]))
-      .catch(console.error)
-  }
+      .catch(console.error);
+  };
 
   const handleEventRemove = (clickInfo: any) => {
-    if (!window.confirm(`Delete event "${clickInfo.event.title}"?`)) return
+    if (!window.confirm(`Delete event "${clickInfo.event.title}"?`)) return;
 
     fetch(`http://localhost:8000/events/${clickInfo.event.id}`, {
       method: 'DELETE',
     }).then(() => {
-      setEvents((prev) => prev.filter((e) => e.id !== clickInfo.event.id))
-    })
-  }
+      setEvents((prev) => prev.filter((e) => e.id !== clickInfo.event.id));
+    });
+  };
 
   return (
     <div className="mx-auto max-w-4xl rounded-xl bg-white p-4 shadow-md">
@@ -70,9 +70,7 @@ export default function Calendar() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveEvent}
-        defaultStart={selectedRange.start}
-        defaultEnd={selectedRange.end}
       />
     </div>
-  )
+  );
 }
