@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime
 
 class Event(BaseModel):
+    id: Optional[str] = None  # Used for frontend/backend symmetry
     title: str
     description: Optional[str] = None
     location: Optional[str] = None
-    start_time: datetime
-    end_time: datetime
+    start: str  # ISO string, e.g., "2025-06-12T11:39"
+    end: str
+    allDay: Optional[bool] = False
